@@ -1,0 +1,13 @@
+﻿global using Microsoft.EntityFrameworkCore;
+global using Walmart.Products.Api.Entities;
+global using Walmart.Products.Api.DbContexts;
+global using Bogus;
+global using Walmart.Products.Api.Repositories;
+global using System.Reflection;
+global using AutoMapper;
+global using Walmart.Products.Api.Contracts.Responses;
+global using Microsoft.AspNetCore.Mvc;
+global using FluentValidation.AspNetCore;
+global using Walmart.Products.Api.Contracts.Requests;
+global using FluentValidation;
+global using Walmart.Products.Api.Validators;
