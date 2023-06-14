@@ -7,9 +7,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{9A21D0A5-D2E7-
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backend", "Backend", "{A3EAD9BA-D558-448D-8645-FA28B9D8AD70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Walmart.UI", "Walmart.UI\Walmart.UI.csproj", "{DBCD9E26-4243-4922-8A92-2949D6B738CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Walmart.UI", "Walmart.UI\Walmart.UI.csproj", "{DBCD9E26-4243-4922-8A92-2949D6B738CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Walmart.Products.Api", "Walmart.Products.Api\Walmart.Products.Api.csproj", "{8A4D8B27-2DDD-4ACE-87FE-E8F8733CC212}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Walmart.Products.Api", "Walmart.Products.Api\Walmart.Products.Api.csproj", "{8A4D8B27-2DDD-4ACE-87FE-E8F8733CC212}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Walmart.Identity", "Walmart.Identity\Walmart.Identity.csproj", "{7DC81162-8386-49AF-8760-F39E1E4550EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +27,10 @@ Global
 		{8A4D8B27-2DDD-4ACE-87FE-E8F8733CC212}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A4D8B27-2DDD-4ACE-87FE-E8F8733CC212}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A4D8B27-2DDD-4ACE-87FE-E8F8733CC212}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DC81162-8386-49AF-8760-F39E1E4550EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DC81162-8386-49AF-8760-F39E1E4550EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DC81162-8386-49AF-8760-F39E1E4550EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DC81162-8386-49AF-8760-F39E1E4550EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +38,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{DBCD9E26-4243-4922-8A92-2949D6B738CF} = {9A21D0A5-D2E7-42F3-B3E3-93D235CBA1A1}
 		{8A4D8B27-2DDD-4ACE-87FE-E8F8733CC212} = {A3EAD9BA-D558-448D-8645-FA28B9D8AD70}
+		{7DC81162-8386-49AF-8760-F39E1E4550EE} = {A3EAD9BA-D558-448D-8645-FA28B9D8AD70}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2B638B38-B0E8-41C4-B59B-07619CFD64DD}
