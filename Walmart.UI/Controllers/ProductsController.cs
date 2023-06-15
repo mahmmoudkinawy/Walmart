@@ -1,16 +1,27 @@
-﻿namespace Walmart.UI.Controllers;
+﻿using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using System.Security.Claims;
+using System.Text;
+
+namespace Walmart.UI.Controllers;
+
+[Authorize]
 public sealed class ProductsController : Controller
 {
     private readonly IProductService _productService;
+    private readonly ILogger<ProductsController> _logger;
 
-    public ProductsController(IProductService productService)
+    public ProductsController(IProductService productService, ILogger<ProductsController> logger)
     {
         _productService = productService ??
             throw new ArgumentNullException(nameof(productService));
+        _logger = logger ??
+            throw new ArgumentNullException(nameof(logger));
     }
 
     public async Task<IActionResult> Index()
     {
+        var t = User.FindFirstValue(ClaimTypes.GivenName);
+
         var products = await _productService.GetProductsAsync();
 
         return View(products);

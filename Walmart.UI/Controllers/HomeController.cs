@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Walmart.UI.Models;
 
 namespace Walmart.UI.Controllers;
