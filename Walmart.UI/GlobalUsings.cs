@@ -10,4 +10,9 @@ global using Walmart.UI.Helpers;
 global using Walmart.UI.Services;
 global using Walmart.UI.ViewModels;
 global using Microsoft.AspNetCore.Authentication;
+global using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+global using System.Text;
+global using System.IdentityModel.Tokens.Jwt;
+
+
 

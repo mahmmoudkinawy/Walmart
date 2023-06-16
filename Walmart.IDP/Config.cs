@@ -1,5 +1,6 @@
 ﻿using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
+using IdentityModel;
 
 namespace Walmart.IDP;
 public static class Config
@@ -8,7 +9,10 @@ public static class Config
         new IdentityResource[]
         {
             new IdentityResources.OpenId(),
-            new IdentityResources.Profile()
+            new IdentityResources.Profile(),
+            new IdentityResource("roles",
+                "Your role(s)",
+                new [] { JwtClaimTypes.Role })
         };
 
     public static IEnumerable<ApiScope> ApiScopes =>
@@ -38,9 +42,10 @@ public static class Config
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "roles"
                     },
-                    //RequireConsent = true
+                    RequireConsent = true
                 }
             };
 }

@@ -1,8 +1,4 @@
-﻿using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using System.Security.Claims;
-using System.Text;
-
-namespace Walmart.UI.Controllers;
+﻿namespace Walmart.UI.Controllers;
 
 [Authorize]
 public sealed class ProductsController : Controller
@@ -20,7 +16,7 @@ public sealed class ProductsController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var t = User.FindFirstValue(ClaimTypes.GivenName);
+        await LogIdentityInformation();
 
         var products = await _productService.GetProductsAsync();
 
@@ -94,4 +90,24 @@ public sealed class ProductsController : Controller
 
         return View(product);
     }
+
+
+    public async Task LogIdentityInformation()
+    {
+        var identityToken = await HttpContext
+            .GetTokenAsync(OpenIdConnectParameterNames.IdToken);
+
+        var userClaimsStringBuilder = new StringBuilder();
+        foreach (var claim in User.Claims)
+        {
+            userClaimsStringBuilder.AppendLine(
+                $"Claim type: {claim.Type} - Claim value: {claim.Value}");
+        }
+
+        _logger.LogInformation($"Identity token & user claims: " +
+            $"\n{identityToken} \n {userClaimsStringBuilder}");
+
+    }
+
+
 }

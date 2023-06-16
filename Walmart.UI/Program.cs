@@ -11,6 +11,8 @@ builder.Services.AddHttpClient(Constants.ApisBaseRoutes.ProductsApi, opts =>
     opts.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
 });
 
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -22,11 +24,20 @@ builder.Services.AddAuthentication(options =>
     {
         options.Authority = builder.Configuration["ApiBaseUrls:IdentityIdp:Url"];
         options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        options.ClientId = builder.Configuration["ApiBaseUrls:IdentityIdp:ClientId"]; ;
+        options.ClientId = builder.Configuration["ApiBaseUrls:IdentityIdp:ClientId"];
         options.ClientSecret = builder.Configuration["ApiBaseUrls:IdentityIdp:ClientSecret"];
         options.ResponseType = builder.Configuration["ApiBaseUrls:IdentityIdp:ResponseType"];
         options.GetClaimsFromUserInfoEndpoint = true;
         options.SaveTokens = true;
+        options.Scope.Add("roles");
+        options.ClaimActions.MapJsonKey("role", "role");
+        options.ClaimActions.Remove("uid");
+        options.ClaimActions.DeleteClaims(new[] { "idp", "sid", "amr" });
+        options.TokenValidationParameters = new()
+        {
+            NameClaimType = "given_name",
+            RoleClaimType = "role"
+        };
     });
 
 var app = builder.Build();

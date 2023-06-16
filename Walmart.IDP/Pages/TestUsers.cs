@@ -5,6 +5,7 @@
 using Duende.IdentityServer.Test;
 using IdentityModel;
 using System.Security.Claims;
+using Walmart.IDP.Helpers;
 
 namespace Walmart.IDP;
 
@@ -19,6 +20,7 @@ public class TestUsers
             Password ="Pa$$w0rd",
             Claims = new List<Claim>()
             {
+                new Claim(JwtClaimTypes.Role, Constants.Roles.Customer),
                 new Claim(JwtClaimTypes.GivenName, "Bob"),
                 new Claim(JwtClaimTypes.FamilyName, "Mahmoud")
             }
@@ -30,8 +32,21 @@ public class TestUsers
             Password ="Pa$$w0rd",
             Claims = new List<Claim>()
             {
+                new Claim(JwtClaimTypes.Role, Constants.Roles.Customer),
                 new Claim(JwtClaimTypes.GivenName, "lisa"),
                 new Claim(JwtClaimTypes.FamilyName, "Mo")
+            }
+        },
+        new TestUser
+        {
+            SubjectId = Guid.NewGuid().ToString(),
+            Username = "admin",
+            Password ="Pa$$w0rd",
+            Claims = new List<Claim>()
+            {
+                new Claim(JwtClaimTypes.Role, Constants.Roles.Admin),
+                new Claim(JwtClaimTypes.GivenName, "admin"),
+                new Claim(JwtClaimTypes.FamilyName, "admona")
             }
         }
     };
