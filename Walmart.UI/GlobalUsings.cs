@@ -1,18 +1,17 @@
-﻿global using Microsoft.AspNetCore.Authentication.Cookies;
+﻿global using Microsoft.AspNetCore.Authentication;
+global using Microsoft.AspNetCore.Authentication.Cookies;
 global using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 global using Microsoft.Net.Http.Headers;
 global using Newtonsoft.Json;
 global using System.ComponentModel.DataAnnotations;
+global using System.Diagnostics;
+global using System.IdentityModel.Tokens.Jwt;
 global using System.Net;
+global using System.Text;
 global using Walmart.UI.Helpers;
+global using Walmart.UI.Models;
 global using Walmart.UI.Services;
 global using Walmart.UI.ViewModels;
-global using Microsoft.AspNetCore.Authentication;
-global using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-global using System.Text;
-global using System.IdentityModel.Tokens.Jwt;
-
-
-

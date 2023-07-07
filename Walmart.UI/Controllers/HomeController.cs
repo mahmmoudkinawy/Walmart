@@ -1,19 +1,32 @@
-﻿using System.Diagnostics;
-using Walmart.UI.Models;
-
-namespace Walmart.UI.Controllers;
+﻿namespace Walmart.UI.Controllers;
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly IProductService _productService;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(IProductService productService)
     {
-        _logger = logger;
+        _productService = productService ??
+            throw new ArgumentNullException(nameof(productService));
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        var products = await _productService.GetProductsAsync();
+
+        return View(products);
+    }
+
+    [Authorize]
+    public async Task<IActionResult> Details(Guid productId)
+    {
+        var product = await _productService.GetProductByIdAsync(productId);
+
+        if (product is null)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
+        return View(product);
     }
 
     public IActionResult Privacy()

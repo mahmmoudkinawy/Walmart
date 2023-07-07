@@ -16,7 +16,7 @@ public sealed class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize]
+    [AllowAnonymous]
     public async Task<IActionResult> GetProducts()
     {
         var products = await _productRepository.GetProductsAsync();
@@ -25,6 +25,7 @@ public sealed class ProductsController : ControllerBase
     }
 
     [HttpGet("{productId}", Name = "GetProductById")]
+    [Authorize]
     public async Task<IActionResult> GetProductById(
         [FromRoute] Guid productId)
     {
