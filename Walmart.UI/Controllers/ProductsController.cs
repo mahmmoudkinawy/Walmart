@@ -1,6 +1,5 @@
 ﻿namespace Walmart.UI.Controllers;
 
-[Authorize]
 public sealed class ProductsController : Controller
 {
     private readonly IProductService _productService;
@@ -14,6 +13,7 @@ public sealed class ProductsController : Controller
             throw new ArgumentNullException(nameof(logger));
     }
 
+    [Authorize]
     public async Task<IActionResult> Index()
     {
         await LogIdentityInformation();
@@ -23,10 +23,12 @@ public sealed class ProductsController : Controller
         return View(products);
     }
 
+    [Authorize(Roles = "Admin")]
     public IActionResult CreateProduct() => View();
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateProduct(ProductForCreateViewModel product)
     {
         if (ModelState.IsValid)
@@ -39,6 +41,7 @@ public sealed class ProductsController : Controller
         return View(product);
     }
 
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> EditProduct([FromQuery] Guid productId)
     {
         var product = await _productService.GetProductByIdAsync(productId);
@@ -53,6 +56,7 @@ public sealed class ProductsController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> EditProduct(ProductViewModel product)
     {
         if (ModelState.IsValid)
@@ -79,6 +83,7 @@ public sealed class ProductsController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteProduct(ProductViewModel product)
     {
         if (ModelState.IsValid)
@@ -91,11 +96,13 @@ public sealed class ProductsController : Controller
         return View(product);
     }
 
-
     public async Task LogIdentityInformation()
     {
         var identityToken = await HttpContext
             .GetTokenAsync(OpenIdConnectParameterNames.IdToken);
+
+        var accessToken = await HttpContext
+            .GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
 
         var userClaimsStringBuilder = new StringBuilder();
         foreach (var claim in User.Claims)
@@ -107,7 +114,8 @@ public sealed class ProductsController : Controller
         _logger.LogInformation($"Identity token & user claims: " +
             $"\n{identityToken} \n {userClaimsStringBuilder}");
 
+        _logger.LogInformation($"Access token: " +
+          $"\n{accessToken}");
     }
-
 
 }

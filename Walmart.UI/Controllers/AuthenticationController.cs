@@ -12,5 +12,7 @@ public sealed class AuthenticationController : Controller
             OpenIdConnectDefaults.AuthenticationScheme);
     }
 
-    public IActionResult LoginCallback() => RedirectToAction("Index", "Products"); 
+    public IActionResult LoginCallback() => RedirectToAction("Index", "Products");
+
+    public IActionResult AccessDenied() => View();
 }

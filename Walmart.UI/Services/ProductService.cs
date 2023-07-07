@@ -13,8 +13,10 @@ public sealed class ProductService : IProductService
     {
         ArgumentException.ThrowIfNullOrEmpty(nameof(request));
 
-        var httpClient = _httpClientFactory.CreateClient(Constants.ApisBaseRoutes.ProductsApi);
+        var httpClient = _httpClientFactory.CreateClient(Constants. ApisBaseRoutes.ProductsApi);
         var response = await httpClient.PostAsJsonAsync("products", request);
+
+        response.EnsureSuccessStatusCode();
 
         if (response.StatusCode == HttpStatusCode.Created)
         {
@@ -31,6 +33,8 @@ public sealed class ProductService : IProductService
 
         var httpClient = _httpClientFactory.CreateClient(Constants.ApisBaseRoutes.ProductsApi);
         var response = await httpClient.GetAsync($"products/{productId}");
+
+        response.EnsureSuccessStatusCode();
 
         if (response.IsSuccessStatusCode)
         {
@@ -50,6 +54,8 @@ public sealed class ProductService : IProductService
     {
         var httpClient = _httpClientFactory.CreateClient(Constants.ApisBaseRoutes.ProductsApi);
         var response = await httpClient.GetAsync("products");
+
+        response.EnsureSuccessStatusCode();
 
         if (response.IsSuccessStatusCode)
         {
@@ -72,6 +78,8 @@ public sealed class ProductService : IProductService
         var httpClient = _httpClientFactory.CreateClient(Constants.ApisBaseRoutes.ProductsApi);
         var response = await httpClient.DeleteAsync($"products/{productId}");
 
+        response.EnsureSuccessStatusCode();
+
         if (response.StatusCode == HttpStatusCode.NoContent)
         {
             return;
@@ -84,6 +92,8 @@ public sealed class ProductService : IProductService
 
         var httpClient = _httpClientFactory.CreateClient(Constants.ApisBaseRoutes.ProductsApi);
         var response = await httpClient.PutAsJsonAsync($"products/{product.Id}", product);
+
+        response.EnsureSuccessStatusCode();
 
         if (response.StatusCode == HttpStatusCode.NoContent)
         {

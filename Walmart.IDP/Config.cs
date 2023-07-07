@@ -15,9 +15,25 @@ public static class Config
                 new [] { JwtClaimTypes.Role })
         };
 
+    public static IEnumerable<ApiResource> ApiResources =>
+        new ApiResource[]
+        {
+            new ApiResource("walmartproductsapi",
+                "Walmart Products Api",
+                new[] { "role" })
+            {
+                Scopes =
+                {
+                    "walmartproductsapi.fullaccess"
+                }
+            }
+        };
+
     public static IEnumerable<ApiScope> ApiScopes =>
         new ApiScope[]
-            { };
+            {
+                new ApiScope("walmartproductsapi.fullaccess")
+            };
 
     public static IEnumerable<Client> Clients =>
         new Client[]
@@ -43,7 +59,8 @@ public static class Config
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "roles"
+                        "roles",
+                        "walmartproductsapi.fullaccess"
                     },
                     RequireConsent = true
                 }

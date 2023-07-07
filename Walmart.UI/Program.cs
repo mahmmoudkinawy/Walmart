@@ -4,12 +4,14 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IProductService, ProductService>();
 
+builder.Services.AddAccessTokenManagement();
+
 builder.Services.AddHttpClient(Constants.ApisBaseRoutes.ProductsApi, opts =>
 {
     opts.BaseAddress = new Uri(builder.Configuration["ApiBaseUrls:ProductsApi"]);
     opts.DefaultRequestHeaders.Clear();
     opts.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
-});
+}).AddUserAccessTokenHandler();
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -18,8 +20,11 @@ builder.Services.AddAuthentication(options =>
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
 })
-    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
-        options => options.ExpireTimeSpan = TimeSpan.FromMinutes(10))
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,options =>
+    {
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+        options.AccessDeniedPath = "/Authentication/AccessDenied";
+    })
     .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
     {
         options.Authority = builder.Configuration["ApiBaseUrls:IdentityIdp:Url"];
@@ -30,9 +35,10 @@ builder.Services.AddAuthentication(options =>
         options.GetClaimsFromUserInfoEndpoint = true;
         options.SaveTokens = true;
         options.Scope.Add("roles");
+        options.Scope.Add("walmartproductsapi.fullaccess");
         options.ClaimActions.MapJsonKey("role", "role");
         options.ClaimActions.Remove("uid");
-        options.ClaimActions.DeleteClaims(new[] { "idp", "sid", "amr" });
+        options.ClaimActions.DeleteClaims(new[] { "idp", "sid", "amr", "local" });
         options.TokenValidationParameters = new()
         {
             NameClaimType = "given_name",

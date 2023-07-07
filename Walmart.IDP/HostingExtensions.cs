@@ -1,21 +1,32 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
+using Walmart.IDP.DbContexts;
+using Walmart.IDP.Entities;
 
 namespace Walmart.IDP;
 internal static class HostingExtensions
 {
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
     {
+        builder.Services.AddDbContext<WalmartIdentityDbContext>(options =>
+            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+        builder.Services.AddIdentity<UserEntity, RoleEntity>()
+            .AddEntityFrameworkStores<WalmartIdentityDbContext>()
+            .AddDefaultTokenProviders();
+
         builder.Services.AddRazorPages();
 
         builder.Services.AddIdentityServer(options =>
             {
-                // https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/api_scopes#authorization-based-on-scopes
                 options.EmitStaticAudienceClaim = true;
             })
             .AddInMemoryIdentityResources(Config.IdentityResources)
             .AddInMemoryApiScopes(Config.ApiScopes)
             .AddInMemoryClients(Config.Clients)
-            .AddTestUsers(TestUsers.Users);
+            .AddInMemoryApiResources(Config.ApiResources)
+            .AddAspNetIdentity<UserEntity>();
 
         return builder.Build();
     }

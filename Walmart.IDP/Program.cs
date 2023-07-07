@@ -1,5 +1,9 @@
 ﻿using Walmart.IDP;
 using Serilog;
+using Walmart.IDP.DbContexts;
+using Microsoft.AspNetCore.Identity;
+using Walmart.IDP.Entities;
+using Microsoft.EntityFrameworkCore;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -20,7 +24,16 @@ try
         .ConfigureServices()
         .ConfigurePipeline();
 
-    app.Run();
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<WalmartIdentityDbContext>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<UserEntity>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<RoleEntity>>();
+
+    await dbContext.Database.MigrateAsync();
+    await Seed.SeedRoles(roleManager);
+    await Seed.SeedUsers(userManager);
+
+    await app.RunAsync();
 }
 catch (Exception ex)
 {

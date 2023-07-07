@@ -16,6 +16,7 @@ public sealed class ProductsController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetProducts()
     {
         var products = await _productRepository.GetProductsAsync();
@@ -38,6 +39,7 @@ public sealed class ProductsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = "RequireAdmin")]
     public async Task<IActionResult> CreateProduct(
         [FromBody] ProductForCreateRequest request)
     {
@@ -51,6 +53,7 @@ public sealed class ProductsController : ControllerBase
     }
 
     [HttpPut("{productId}")]
+    [Authorize(Policy = "RequireAdmin")]
     public async Task<IActionResult> UpdateProduct(
         [FromRoute] Guid productId,
         [FromBody] ProductForUpdateRequest request)
@@ -69,6 +72,7 @@ public sealed class ProductsController : ControllerBase
     }
 
     [HttpDelete("{productId}")]
+    [Authorize(Policy = "RequireAdmin")]
     public async Task<IActionResult> RemoveProduct(
         [FromRoute] Guid productId)
     {
