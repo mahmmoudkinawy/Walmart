@@ -1,4 +1,4 @@
-namespace Walmart.IDP.Pages.Login;
+namespace IdentityServerHost.Pages.Login;
 
 public class LoginOptions
 {

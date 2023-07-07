@@ -1,9 +1,7 @@
-using Duende.IdentityServer;
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
-using Duende.IdentityServer.Test;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -11,15 +9,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Walmart.IDP.Entities;
 
-namespace Walmart.IDP.Pages.Login;
+namespace IdentityServerHost.Pages.Login;
 
 [SecurityHeaders]
 [AllowAnonymous]
 public class Index : PageModel
 {
+    private readonly UserManager<UserEntity> _userManager;
+    private readonly SignInManager<UserEntity> _signInManager;
     private readonly IIdentityServerInteractionService _interaction;
     private readonly IEventService _events;
-    private readonly UserManager<UserEntity> _userManager;
     private readonly IAuthenticationSchemeProvider _schemeProvider;
     private readonly IIdentityProviderStore _identityProviderStore;
 
@@ -33,13 +32,15 @@ public class Index : PageModel
         IAuthenticationSchemeProvider schemeProvider,
         IIdentityProviderStore identityProviderStore,
         IEventService events,
-        UserManager<UserEntity> userManager)
+        UserManager<UserEntity> userManager,
+        SignInManager<UserEntity> signInManager)
     {
+        _userManager = userManager;
+        _signInManager = signInManager;
         _interaction = interaction;
         _schemeProvider = schemeProvider;
         _identityProviderStore = identityProviderStore;
         _events = events;
-        _userManager = userManager;
     }
 
     public async Task<IActionResult> OnGet(string returnUrl)
@@ -89,40 +90,14 @@ public class Index : PageModel
 
         if (ModelState.IsValid)
         {
-            // validate username/password against in-memory store
-            var user = await _userManager.FindByNameAsync(Input.Username);
-
-            if (user == null)
+            var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberLogin, lockoutOnFailure: true);
+            if (result.Succeeded)
             {
-                await _events.RaiseAsync(new UserLoginFailureEvent(Input.Username, "invalid credentials", clientId: context?.Client.ClientId));
-                ModelState.AddModelError(string.Empty, LoginOptions.InvalidCredentialsErrorMessage);
-                return Page();
-            }
-
-            if (user is not null)
-            {
-                await _events.RaiseAsync(new UserLoginSuccessEvent(
-                    user.UserName, user.Id.ToString(), user.UserName, clientId: context?.Client.ClientId));
-
-                // only set explicit expiration here if user chooses "remember me". 
-                // otherwise we rely upon expiration configured in cookie middleware.
-                AuthenticationProperties props = null;
-                if (LoginOptions.AllowRememberLogin && Input.RememberLogin)
-                {
-                    props = new AuthenticationProperties
-                    {
-                        IsPersistent = true,
-                        ExpiresUtc = DateTimeOffset.UtcNow.Add(LoginOptions.RememberMeLoginDuration)
-                    };
-                };
-
-                // issue authentication cookie with subject ID and username
-                var isuser = new IdentityServerUser(user.Id.ToString())
-                {
-                    DisplayName = user.UserName
-                };
-
-                await HttpContext.SignInAsync(isuser, props);
+                var user = await _userManager.FindByNameAsync(Input.Username);
+                await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName,
+                    user.Id.ToString(),
+                    user.UserName,
+                    clientId: context?.Client.ClientId));
 
                 if (context != null)
                 {

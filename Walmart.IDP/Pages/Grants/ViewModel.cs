@@ -1,4 +1,4 @@
-namespace Walmart.IDP.Pages.Grants;
+namespace IdentityServerHost.Pages.Grants;
 
 public class ViewModel
 {

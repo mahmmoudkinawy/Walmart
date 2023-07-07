@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Walmart.IDP.Pages.Account;
+namespace IdentityServerHost.Pages.Account;
 
 public class AccessDeniedModel : PageModel
 {

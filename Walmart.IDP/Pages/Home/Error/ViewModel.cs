@@ -3,7 +3,7 @@
 
 using Duende.IdentityServer.Models;
 
-namespace Walmart.IDP.Pages.Error;
+namespace IdentityServerHost.Pages.Error;
 
 public class ViewModel
 {

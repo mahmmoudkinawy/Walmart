@@ -1,5 +1,5 @@
 
-namespace Walmart.IDP.Pages.Logout;
+namespace IdentityServerHost.Pages.Logout;
 
 public class LogoutOptions
 {

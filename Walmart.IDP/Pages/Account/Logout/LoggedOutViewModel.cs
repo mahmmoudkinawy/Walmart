@@ -3,7 +3,7 @@
 // See LICENSE in the project root for license information.
 
 
-namespace Walmart.IDP.Pages.Logout;
+namespace IdentityServerHost.Pages.Logout;
 
 public class LoggedOutViewModel
 {
